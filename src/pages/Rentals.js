@@ -3,10 +3,14 @@ import "./Rentals.css";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 import logo from "../images/airbnbRed.png";
-import { ConnectButton, Select, DatePicker, Input, Icon, Button } from "web3uikit";
+import { ConnectButton, Icon, Button } from "web3uikit";
+import RentalsMap from "../components/RentalsMap";
+import { useState, useEffect } from "react";
 
 const Rentals = () => {
   const { state: searchFilters } = useLocation();
+  const [highLight, setHighLight] = useState();
+
   const rentalsList = [
     {
       attributes: {
@@ -22,6 +26,11 @@ const Rentals = () => {
       },
     },
   ];
+
+  let cords = [];
+  rentalsList.forEach((e) => {
+    cords.push({ lat: e.attributes.lat, lng: e.attributes.long });
+  })
 
 
   return (
@@ -63,20 +72,20 @@ const Rentals = () => {
         <div className="rentalsContentL">
           Stays available for your destination
           {rentalsList &&
-            rentalsList.map(e => {
+            rentalsList.map((e, i) => {
               return (
                 <>
                   <hr className="line2" />
-                  <div className="rentalDiv">
-                    <img className="rentalImg" src={ e.attributes.imgUrl } alt={ e.attributes.name }></img>
+                  <div className={highLight === i ? "rentalDivH" : "rentalDiv"}>
+                    <img className="rentalImg" src={e.attributes.imgUrl} alt={e.attributes.name}></img>
                     <div className="rentalInfo">
-                      <div className="rentalTitle">{ e.attributes.name }</div>
-                      <div className="rentalDesc">{ e.attributes.unoDescription }</div>
-                      <div className="rentalDesc">{ e.attributes.dosDescription }</div>
+                      <div className="rentalTitle">{e.attributes.name}</div>
+                      <div className="rentalDesc">{e.attributes.unoDescription}</div>
+                      <div className="rentalDesc">{e.attributes.dosDescription}</div>
                       <div className="bottomButton">
                         <Button text="Stay here" />
                         <div className="price">
-                          <Icon fill="#808080" size={10} svg="matic" /> { e.attributes.pricePerDay } / Day
+                          <Icon fill="#808080" size={10} svg="matic" /> {e.attributes.pricePerDay} / Day
                         </div>
                       </div>
                     </div>
@@ -86,7 +95,7 @@ const Rentals = () => {
             })}
         </div>
         <div className="rentalsContentR">
-
+          <RentalsMap locations={cords} setHighLight={setHighLight} />
         </div>
       </div>
     </>
