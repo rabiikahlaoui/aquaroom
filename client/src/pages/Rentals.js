@@ -7,6 +7,7 @@ import { ConnectButton, Icon, Button, useNotification } from "web3uikit";
 import RentalsMap from "../components/RentalsMap";
 import { useState, useEffect } from "react";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { User } from "../components/User";
 
 const Rentals = () => {
   const { state: searchFilters } = useLocation();
@@ -153,6 +154,9 @@ const Rentals = () => {
           </div>
         </div>
         <div className="lrContainers">
+          {account &&
+          <User account={account} />
+          }
           <ConnectButton />
         </div>
       </div>
